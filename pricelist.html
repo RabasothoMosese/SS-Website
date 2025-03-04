@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeaSyt Carwash</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #e3f2fd;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            color: #007bff;
+            font-size: 36px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #333;
+        }
+        .gallery {
+            margin-top: 20px;
+        }
+        .gallery img {
+            width: 200px;
+            height: auto;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .contact-button, .book-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .contact-button:hover, .book-button:hover {
+            background-color: #0056b3;
+        }
+        .pricelist-link {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .pricelist-link:hover {
+            text-decoration: underline;
+        }
+        .booking-form {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            width: 300px;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>SeaSyt Carwash</h1>
+    <a href="pricelist.html" class="pricelist-link">View Pricelist</a>
+    
+    <h2>Gallery</h2>
+    <div class="gallery">
+        <img src="carwash1.jpg" alt="Car Wash Image 1">
+        <img src="carwash2.jpg" alt="Car Wash Image 2">
+        <img src="carwash3.jpg" alt="Car Wash Image 3">
+    </div>
+    
+    <button class="contact-button" onclick="alert('Call us at +123456789')">Contact Us</button>
+    <button class="book-button" onclick="toggleBookingForm()">Book an Appointment</button>
+    
+    <div class="booking-form" id="bookingForm">
+        <h3>Book an Appointment</h3>
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" required>
+        
+        <label for="vehicle">Vehicle Type:</label>
+        <select id="vehicle" required>
+            <option value="4+1">4+1</option>
+            <option value="TRUCK">TRUCK</option>
+            <option value="VAN">VAN</option>
+        </select>
+
+        <label for="pickup">Do you need pickup service?</label>
+        <select id="pickup" required onchange="toggleLocationField()">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select>
+
+        <div id="locationField" style="display: none;">
+            <label for="location">Share Live Location:</label>
+            <button type="button" onclick="getLocation()">Share My Location</button>
+            <p id="locationText"></p>
+        </div>
+        
+        <button type="submit" onclick="submitBooking()">Book Now</button>
+    </div>
+    
+    <div class="footer">Contact us at: <strong>info@seasytcarwash.com</strong></div>
+
+    <script>
+        function toggleBookingForm() {
+            const form = document.getElementById("bookingForm");
+            form.style.display = form.style.display === "block" ? "none" : "block";
+        }
+
+        function toggleLocationField() {
+            const pickup = document.getElementById("pickup").value;
+            document.getElementById("locationField").style.display = pickup === "yes" ? "block" : "none";
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const googleMapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                    document.getElementById("locationText").innerHTML = 
+                        `<a href="${googleMapsLink}" target="_blank">View My Location</a>`;
+                }, () => {
+                    document.getElementById("locationText").textContent = "Location access denied.";
+                });
+            } else {
+                document.getElementById("locationText").textContent = "Geolocation is not supported.";
+            }
+        }
+
+        function submitBooking() {
+            const name = document.getElementById("name").value;
+            const vehicle = document.getElementById("vehicle").value;
+            const pickup = document.getElementById("pickup").value;
+            
+            if (!name) {
+                alert("Please enter your name.");
+                return;
+            }
+            
+            alert(`Booking Confirmed!\nName: ${name}\nVehicle: ${vehicle}\nPickup: ${pickup}`);
+        }
+    </script>
+</body>
+</html>
